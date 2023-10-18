@@ -50,10 +50,11 @@ void negativeImage(qtNode *t1, qtNode **res)
     }
 
     (*res)->area = t1->area;
-    (*res)->p.red = 255 - t1->p.red;
-    (*res)->p.blue = 255 - t1->p.green;
-    (*res)->p.green = 255 - t1->p.blue;
+    (*res)->p.red = (t1->p.red <= 255) ? 255 - t1->p.red : 0;
+    (*res)->p.blue = (t1->p.blue <= 255) ? 255 - t1->p.blue : 0;
+    (*res)->p.green = (t1->p.green <= 255) ? 255 - t1->p.green : 0;
     (*res)->area = t1->area;
+
     return;
 }
 
@@ -79,10 +80,17 @@ void sepia(qtNode* t1,qtNode** res)
     }
 
     (*res)->area = t1->area;
-    (*res)->p.red = 0.393*t1->p.red+0.769*t1->p.green+0.189*t1->p.blue;
-    (*res)->p.blue = 0.349*t1->p.red+0.686*t1->p.green+0.168*t1->p.blue;
-    (*res)->p.green = 0.272*t1->p.red+0.534*t1->p.green+0.131*t1->p.blue;
-    (*res)->area = t1->area;
+(*res)->p.red = 0.393 * t1->p.red + 0.769 * t1->p.green + 0.189 * t1->p.blue;
+(*res)->p.blue = 0.349 * t1->p.red + 0.686 * t1->p.green + 0.168 * t1->p.blue;
+(*res)->p.green = 0.272 * t1->p.red + 0.534 * t1->p.green + 0.131 * t1->p.blue;
+
+// Ensure that the color values don't exceed 255
+(*res)->p.red = (*res)->p.red <= 255 ? (*res)->p.red : 255;
+(*res)->p.blue = (*res)->p.blue <= 255 ? (*res)->p.blue : 255;
+(*res)->p.green = (*res)->p.green <= 255 ? (*res)->p.green : 255;
+
+(*res)->area = t1->area;
+
     return;
 
 }
