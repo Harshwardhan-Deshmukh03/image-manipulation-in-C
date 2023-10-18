@@ -2,29 +2,30 @@
 
 //--------------------DECOMPRESSION FUNCTION----------------------------------//
 
-void decompressImage(qtNode *t, pixels ***matrix, int x, int y, int size)
+void decompressImage(qtNode *node, pixels ***imageMatrix, int startX, int startY, int blockSize)
 {
     int i, j;
 
     // already optimized tree
-    if (t->topLeft == NULL && t->topRight == NULL && t->bottomLeft == NULL && t->bottomRight == NULL)
+    if (node->topLeft == NULL && node->topRight == NULL && node->bottomLeft == NULL && node->bottomRight == NULL)
     {
-        for (i = y; i < y + size; i++)
+        for (i = startY; i < startY + blockSize; i++)
         {
-            for (j = x; j < x + size; j++)
+            for (j = startX; j < startX + blockSize; j++)
             {
-                (*matrix)[i][j].red = t->p.red;
-                (*matrix)[i][j].green = t->p.green;
-                (*matrix)[i][j].blue = t->p.blue;
+                (*imageMatrix)[i][j].red = node->p.red;
+                (*imageMatrix)[i][j].green = node->p.green;
+                (*imageMatrix)[i][j].blue = node->p.blue;
             }
         }
     }
     // decompress till tree is optimized
     else
     {
-        decompressImage(t->topLeft, matrix, x, y, size / 2);
-        decompressImage(t->topRight, matrix, x + (size / 2), y, size / 2);
-        decompressImage(t->bottomRight, matrix, x + (size / 2), y + (size / 2), size / 2);
-        decompressImage(t->bottomLeft, matrix, x, y + (size / 2), size / 2);
+        decompressImage(node->topLeft, imageMatrix, startX, startY, blockSize / 2);
+        decompressImage(node->topRight, imageMatrix, startX + (blockSize / 2), startY, blockSize / 2);
+        decompressImage(node->bottomRight, imageMatrix, startX + (blockSize / 2), startY + (blockSize / 2), blockSize / 2);
+        decompressImage(node->bottomLeft, imageMatrix, startX, startY + (blockSize / 2), blockSize / 2);
     }
 }
+
