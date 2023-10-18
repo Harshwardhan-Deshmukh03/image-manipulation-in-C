@@ -29,6 +29,37 @@ void grayScale(qtNode *t1, qtNode **res)
     return;
 }
 
+void brighten(qtNode *t1, qtNode **res)
+{
+    (*res) = malloc(sizeof(qtNode));
+    if (t1->topLeft != NULL)
+    {
+        brighten(t1->topLeft, &(*res)->topLeft);
+        brighten(t1->topRight, &(*res)->topRight);
+        brighten(t1->bottomLeft, &(*res)->bottomLeft);
+        brighten(t1->bottomRight, &(*res)->bottomRight);
+    }
+    else
+    {
+        (*res)->topRight = NULL;
+        (*res)->topLeft = NULL;
+        (*res)->bottomLeft = NULL;
+        (*res)->bottomRight = NULL;
+    }
+
+    (*res)->area = t1->area;
+    // Brighten the image by increasing the color channels
+    double brightnessFactor = 1.2; // Adjust this factor to control the brightness
+    (*res)->p.red = t1->p.red * brightnessFactor;
+    (*res)->p.green = t1->p.green * brightnessFactor;
+    (*res)->p.blue = t1->p.blue * brightnessFactor;
+
+    return;
+}
+
+
+
+
 void negativeImage(qtNode *t1, qtNode **res)
 {
     (*res) = malloc(sizeof(qtNode));
